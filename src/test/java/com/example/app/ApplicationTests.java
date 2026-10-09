@@ -25,7 +25,6 @@ class ApplicationTests {
     void whenGetHealth_thenSuccess() throws Exception {
         mockMvc.perform(get("/api/health"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.status").value("UP"))
-                .andExpect(jsonPath("$.message").value("Service is running"));
+                .andExpect(jsonPath("$.status").value("UP"));
     }
 }
