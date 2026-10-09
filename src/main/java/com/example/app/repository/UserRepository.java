@@ -49,13 +49,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     long countByStatus(UserStatus status);
 
-    /** Users created since the given timestamp (for "N this month" badge). */
     @Query("SELECT COUNT(u) FROM User u WHERE u.createdAt >= :since")
     long countCreatedSince(@Param("since") LocalDateTime since);
 
-    // -----------------------------------------------------------------------
-    // CSV export – fetch all matching rows without pagination
-    // -----------------------------------------------------------------------
     @Query("""
         SELECT u FROM User u
         WHERE (:search IS NULL

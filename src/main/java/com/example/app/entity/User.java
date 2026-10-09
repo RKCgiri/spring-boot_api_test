@@ -11,10 +11,7 @@ import java.util.Set;
 import com.example.app.enums.Permission;
 import com.example.app.enums.Role;
 import com.example.app.enums.UserStatus;
-/**
- * Represents a user in the system.
- * Maps to the 'users' table in PostgreSQL.
- */
+
 @Entity
 @Table(
     name = "users",

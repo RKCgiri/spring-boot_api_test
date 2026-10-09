@@ -64,7 +64,7 @@ public class UserServiceImpl implements UserService {
         int page,
         int size
     ) {
-        size = Math.min(size, 100);   // cap page size
+        size = Math.min(size, 100); 
         Pageable pageable = PageRequest.of(page, size);
 
         // Pass null instead of blank strings so JPQL IS NULL checks work
@@ -90,10 +90,6 @@ public class UserServiceImpl implements UserService {
     }
 
 
-
-    // -----------------------------------------------------------------------
-    // STATS
-    // -----------------------------------------------------------------------
     public UserStatsResponse getStats() {
         LocalDateTime startOfMonth = LocalDateTime.now().withDayOfMonth(1).toLocalDate().atStartOfDay();
 
@@ -109,9 +105,6 @@ public class UserServiceImpl implements UserService {
         );
     }
 
-    // -----------------------------------------------------------------------
-    // CSV EXPORT
-    // -----------------------------------------------------------------------
     public String exportCsv(String search, Role role, UserStatus status,
                              String school, String region) {
 
@@ -143,10 +136,7 @@ public class UserServiceImpl implements UserService {
         return csv.toString();
     }
 
-    // -----------------------------------------------------------------------
-    // Private helpers
-    // -----------------------------------------------------------------------
-
+  
     private String escapeCsv(String value) {
         if (value == null) return "";
         // Wrap in quotes if value contains comma, quote or newline

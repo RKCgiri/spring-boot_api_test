@@ -22,18 +22,12 @@ public class UserController {
 
     private final UserService userService;
 
-    // -----------------------------------------------------------------------
-    // CREATE  POST /api/users
-    // -----------------------------------------------------------------------
     @PostMapping("/users")
     public ResponseEntity<UserResponse> createUser(@Valid @RequestBody UserRequest request) {
         UserResponse response = userService.createUser(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    // -----------------------------------------------------------------------
-    // READ – paginated list  GET /api/users
-    // -----------------------------------------------------------------------
     @GetMapping("/users")
     public ResponseEntity<PagedResponse<UserResponse>> getUsers(
         @RequestParam(required = false) String search,
@@ -48,18 +42,11 @@ public class UserController {
             userService.getUsers(search, role, status, school, region, page, size));
     }
 
-
-    // -----------------------------------------------------------------------
-    // STATS  GET /api/users/stats
-    // -----------------------------------------------------------------------
     @GetMapping("/users/status")
     public ResponseEntity<UserStatsResponse> getStats() {
         return ResponseEntity.ok(userService.getStats());
     }
 
-    // -----------------------------------------------------------------------
-    // CSV EXPORT  GET /api/users/export/csv
-    // -----------------------------------------------------------------------
     @GetMapping("/users/export/csv")
     public ResponseEntity<byte[]> exportCsv(
         @RequestParam(required = false) String search,

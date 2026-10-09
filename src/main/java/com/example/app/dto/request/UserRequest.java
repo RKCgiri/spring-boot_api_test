@@ -10,10 +10,6 @@ import jakarta.validation.constraints.Size;
 
 import java.util.Set;
 
-/**
- * Request body for creating or updating a user.
- * All fields are validated via Bean Validation.
- */
 public record UserRequest(
 
     @NotBlank(message = "First name is required")

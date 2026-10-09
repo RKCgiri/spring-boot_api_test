@@ -8,10 +8,6 @@ import com.example.app.enums.UserStatus;
 import java.time.LocalDateTime;
 import java.util.Set;
 
-/**
- * Response payload returned for individual user endpoints.
- * Uses a Java record for immutability; built from a {@link User} entity via {@link #from(User)}.
- */
 public record UserResponse(
     Long id,
     String firstName,
