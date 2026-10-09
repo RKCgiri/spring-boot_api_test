@@ -13,10 +13,7 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-/**
- * Spring Data JPA repository for {@link User}.
- * All filtering is done via JPQL so it works with any JPA provider.
- */
+
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
@@ -24,9 +21,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     boolean existsByEmail(String email);
 
-    // -----------------------------------------------------------------------
-    // Paginated search with optional filters (null-safe via JPQL coalescing)
-    // -----------------------------------------------------------------------
     @Query("""
         SELECT u FROM User u
         WHERE (:search IS NULL
@@ -48,10 +42,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
         @Param("region") String region,
         Pageable pageable
     );
-
-    // -----------------------------------------------------------------------
-    // Statistics queries (used by the summary cards on the list page)
-    // -----------------------------------------------------------------------
 
     long countByRole(Role role);
 

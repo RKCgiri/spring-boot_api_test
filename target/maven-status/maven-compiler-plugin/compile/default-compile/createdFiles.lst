@@ -4,7 +4,6 @@ com\example\app\enums\Permission.class
 com\example\app\dto\response\UserResponse.class
 com\example\app\dto\response\PagedResponse.class
 com\example\app\exception\GlobalExceptionHandler.class
-com\example\app\controller\UserController$HealthResponse.class
 com\example\app\dto\request\ResetPasswordRequest.class
 com\example\app\entity\School$SchoolBuilder.class
 com\example\app\entity\School.class

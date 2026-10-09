@@ -11,8 +11,6 @@ public interface UserService {
 
     UserResponse createUser(UserRequest request);
 
-    UserResponse getUserById(Long id);
-
     PagedResponse<UserResponse> getUsers(
         String search,
         Role role,
@@ -22,12 +20,6 @@ public interface UserService {
         int page,
         int size
     );
-
-    UserResponse updateUser(Long id, UserRequest request);
-
-    void recordLogin(Long id);
-
-    void deleteUser(Long id);
 
     UserStatsResponse getStats();
 
