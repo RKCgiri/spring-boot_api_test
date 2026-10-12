@@ -9,6 +9,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.example.app.exception.ResourceNotFoundException;
+import com.example.app.exception.UnauthorizedException;
+import com.example.app.dto.request.ForgotPasswordRequest;
+import com.example.app.dto.request.VerifyOtpRequest;
+import com.example.app.dto.request.ResetPasswordRequest;
+import com.example.app.dto.response.MessageResponse;
 
 import java.util.Random;
 
@@ -25,11 +31,11 @@ public class AuthServiceImpl implements AuthService {
         log.info("Login attempt for email: {}", request.email());
 
         User user = userRepository.findByEmail(request.email())
-            .orElseThrow(() -> new com.example.app.exception.UnauthorizedException("Invalid email or password"));
+            .orElseThrow(() -> new UnauthorizedException("Invalid email or password"));
 
         // Normally we'd use BCrypt to check the password. Since this is simple:
         if (user.getPassword() == null || !user.getPassword().equals(request.password())) {
-            throw new com.example.app.exception.UnauthorizedException("Invalid email or password");
+            throw new UnauthorizedException("Invalid email or password");
         }
 
         // Generate 6-digit OTP
@@ -45,11 +51,11 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @Transactional
-    public LoginResponse forgotPassword(com.example.app.dto.request.ForgotPasswordRequest request) {
+    public LoginResponse forgotPassword(ForgotPasswordRequest request) {
         log.info("Forgot password attempt for email: {}", request.email());
 
         User user = userRepository.findByEmail(request.email())
-            .orElseThrow(() -> new com.example.app.exception.ResourceNotFoundException("User not found with email: " + request.email()));
+            .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + request.email()));
 
         // Generate 6-digit OTP
         String otp = String.format("%06d", new Random().nextInt(999999));
@@ -64,29 +70,29 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @Transactional
-    public com.example.app.dto.response.MessageResponse verifyOtp(com.example.app.dto.request.VerifyOtpRequest request) {
+    public MessageResponse verifyOtp(VerifyOtpRequest request) {
         log.info("Verify OTP attempt for email: {}", request.email());
 
         User user = userRepository.findByEmail(request.email())
-            .orElseThrow(() -> new com.example.app.exception.ResourceNotFoundException("User not found with email: " + request.email()));
+            .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + request.email()));
 
         if (user.getOtp() == null || !user.getOtp().equals(request.otp())) {
-            throw new com.example.app.exception.UnauthorizedException("Invalid OTP");
+            throw new UnauthorizedException("Invalid OTP");
         }
 
-        return new com.example.app.dto.response.MessageResponse("OTP verified successfully");
+        return new MessageResponse("OTP verified successfully");
     }
 
     @Override
     @Transactional
-    public com.example.app.dto.response.MessageResponse resetPassword(com.example.app.dto.request.ResetPasswordRequest request) {
+    public MessageResponse resetPassword(ResetPasswordRequest request) {
         log.info("Reset password attempt for email: {}", request.email());
 
         User user = userRepository.findByEmail(request.email())
-            .orElseThrow(() -> new com.example.app.exception.ResourceNotFoundException("User not found with email: " + request.email()));
+            .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + request.email()));
 
         if (user.getOtp() == null || !user.getOtp().equals(request.otp())) {
-            throw new com.example.app.exception.UnauthorizedException("Invalid OTP");
+            throw new UnauthorizedException("Invalid OTP");
         }
 
         user.setPassword(request.newPassword());
@@ -95,6 +101,6 @@ public class AuthServiceImpl implements AuthService {
 
         log.info("Password reset successfully for user {}", request.email());
 
-        return new com.example.app.dto.response.MessageResponse("Password reset successfully");
+        return new MessageResponse("Password reset successfully");
     }
 }
