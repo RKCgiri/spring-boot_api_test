@@ -1,3 +1,4 @@
+
 package com.example.app.repository;
 
 import com.example.app.entity.School;
@@ -14,30 +15,30 @@ import java.util.Optional;
 
 @Repository
 public interface SchoolRepository extends JpaRepository<School, Long> {
-    
+
     Optional<School> findBySchoolCode(String schoolCode);
-    
+
     long countByStatus(SchoolStatus status);
-    
+
     @Query("SELECT AVG(s.syncRate) FROM School s")
     Double getAverageSyncRate();
 
     @Query("SELECT s FROM School s WHERE " +
-           "(:schoolName IS NULL OR LOWER(s.schoolName) LIKE LOWER(CONCAT('%', :schoolName, '%'))) AND " +
-           "(:region IS NULL OR s.region = :region) AND " +
-           "(:status IS NULL OR s.status = :status)")
+            "(:schoolName = '' OR LOWER(s.schoolName) LIKE LOWER(CONCAT('%', :schoolName, '%'))) AND " +
+            "(:region IS NULL OR s.region = :region) AND " +
+            "(:status IS NULL OR s.status = :status)")
     Page<School> searchSchools(
-            @Param("schoolName") String schoolName, 
-            @Param("region") String region, 
-            @Param("status") SchoolStatus status, 
+            @Param("schoolName") String schoolName,
+            @Param("region") String region,
+            @Param("status") SchoolStatus status,
             Pageable pageable);
 
     @Query("SELECT s FROM School s WHERE " +
-           "(:schoolName IS NULL OR LOWER(s.schoolName) LIKE LOWER(CONCAT('%', :schoolName, '%'))) AND " +
-           "(:region IS NULL OR s.region = :region) AND " +
-           "(:status IS NULL OR s.status = :status)")
+            "(:schoolName = '' OR LOWER(s.schoolName) LIKE LOWER(CONCAT('%', :schoolName, '%'))) AND " +
+            "(:region IS NULL OR s.region = :region) AND " +
+            "(:status IS NULL OR s.status = :status)")
     List<School> searchSchoolsForExport(
-            @Param("schoolName") String schoolName, 
-            @Param("region") String region, 
+            @Param("schoolName") String schoolName,
+            @Param("region") String region,
             @Param("status") SchoolStatus status);
 }

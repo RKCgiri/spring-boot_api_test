@@ -1,10 +1,13 @@
 C:\Users\sudiptagiri\Downloads\java_project_setup\java_project_setup\src\main\java\com\example\app\Application.java
+C:\Users\sudiptagiri\Downloads\java_project_setup\java_project_setup\src\main\java\com\example\app\config\PasswordConfig.java
+C:\Users\sudiptagiri\Downloads\java_project_setup\java_project_setup\src\main\java\com\example\app\config\SecurityConfig.java
 C:\Users\sudiptagiri\Downloads\java_project_setup\java_project_setup\src\main\java\com\example\app\controller\AuthController.java
 C:\Users\sudiptagiri\Downloads\java_project_setup\java_project_setup\src\main\java\com\example\app\controller\HealthController.java
 C:\Users\sudiptagiri\Downloads\java_project_setup\java_project_setup\src\main\java\com\example\app\controller\SchoolController.java
 C:\Users\sudiptagiri\Downloads\java_project_setup\java_project_setup\src\main\java\com\example\app\controller\UserController.java
 C:\Users\sudiptagiri\Downloads\java_project_setup\java_project_setup\src\main\java\com\example\app\dto\request\ForgotPasswordRequest.java
 C:\Users\sudiptagiri\Downloads\java_project_setup\java_project_setup\src\main\java\com\example\app\dto\request\LoginRequest.java
+C:\Users\sudiptagiri\Downloads\java_project_setup\java_project_setup\src\main\java\com\example\app\dto\request\RegisterRequest.java
 C:\Users\sudiptagiri\Downloads\java_project_setup\java_project_setup\src\main\java\com\example\app\dto\request\ResetPasswordRequest.java
 C:\Users\sudiptagiri\Downloads\java_project_setup\java_project_setup\src\main\java\com\example\app\dto\request\SchoolCreateRequest.java
 C:\Users\sudiptagiri\Downloads\java_project_setup\java_project_setup\src\main\java\com\example\app\dto\request\UserRequest.java
@@ -16,6 +19,7 @@ C:\Users\sudiptagiri\Downloads\java_project_setup\java_project_setup\src\main\ja
 C:\Users\sudiptagiri\Downloads\java_project_setup\java_project_setup\src\main\java\com\example\app\dto\response\SchoolStatsResponse.java
 C:\Users\sudiptagiri\Downloads\java_project_setup\java_project_setup\src\main\java\com\example\app\dto\response\UserResponse.java
 C:\Users\sudiptagiri\Downloads\java_project_setup\java_project_setup\src\main\java\com\example\app\dto\response\UserStatsResponse.java
+C:\Users\sudiptagiri\Downloads\java_project_setup\java_project_setup\src\main\java\com\example\app\dto\response\VerifyOtpResponse.java
 C:\Users\sudiptagiri\Downloads\java_project_setup\java_project_setup\src\main\java\com\example\app\entity\School.java
 C:\Users\sudiptagiri\Downloads\java_project_setup\java_project_setup\src\main\java\com\example\app\entity\User.java
 C:\Users\sudiptagiri\Downloads\java_project_setup\java_project_setup\src\main\java\com\example\app\enums\Permission.java
@@ -28,6 +32,12 @@ C:\Users\sudiptagiri\Downloads\java_project_setup\java_project_setup\src\main\ja
 C:\Users\sudiptagiri\Downloads\java_project_setup\java_project_setup\src\main\java\com\example\app\exception\UnauthorizedException.java
 C:\Users\sudiptagiri\Downloads\java_project_setup\java_project_setup\src\main\java\com\example\app\repository\SchoolRepository.java
 C:\Users\sudiptagiri\Downloads\java_project_setup\java_project_setup\src\main\java\com\example\app\repository\UserRepository.java
+C:\Users\sudiptagiri\Downloads\java_project_setup\java_project_setup\src\main\java\com\example\app\security\CustomAccessDeniedHandler.java
+C:\Users\sudiptagiri\Downloads\java_project_setup\java_project_setup\src\main\java\com\example\app\security\CustomUserDetails.java
+C:\Users\sudiptagiri\Downloads\java_project_setup\java_project_setup\src\main\java\com\example\app\security\CustomUserDetailsService.java
+C:\Users\sudiptagiri\Downloads\java_project_setup\java_project_setup\src\main\java\com\example\app\security\JwtAuthenticationEntryPoint.java
+C:\Users\sudiptagiri\Downloads\java_project_setup\java_project_setup\src\main\java\com\example\app\security\JwtAuthenticationFilter.java
+C:\Users\sudiptagiri\Downloads\java_project_setup\java_project_setup\src\main\java\com\example\app\security\JwtTokenProvider.java
 C:\Users\sudiptagiri\Downloads\java_project_setup\java_project_setup\src\main\java\com\example\app\service\AuthService.java
 C:\Users\sudiptagiri\Downloads\java_project_setup\java_project_setup\src\main\java\com\example\app\service\impl\AuthServiceImpl.java
 C:\Users\sudiptagiri\Downloads\java_project_setup\java_project_setup\src\main\java\com\example\app\service\impl\SchoolServiceImpl.java

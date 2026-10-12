@@ -27,6 +27,7 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
 
     @Transactional
     public UserResponse createUser(UserRequest request) {
@@ -36,6 +37,11 @@ public class UserServiceImpl implements UserService {
             throw new DuplicateResourceException(
                 "A user with email '" + request.email() + "' already exists");
         }
+
+        String rawPassword = request.password();
+        String encodedPassword = (rawPassword != null && !rawPassword.isBlank())
+            ? passwordEncoder.encode(rawPassword)
+            : null;
 
         User user = User.builder()
             .firstName(request.firstName())
@@ -47,7 +53,7 @@ public class UserServiceImpl implements UserService {
             .school(request.school())
             .region(request.region())
             .permissions(request.permissions() != null ? request.permissions() : Collections.emptySet())
-            .password(request.password())
+            .password(encodedPassword)
             .build();
 
         User saved = userRepository.save(user);
