@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import com.example.app.mapper.UserMapper;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -28,6 +30,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
+    private final UserMapper userMapper;
 
     @Transactional
     public UserResponse createUser(UserRequest request) {
@@ -43,22 +46,11 @@ public class UserServiceImpl implements UserService {
             ? passwordEncoder.encode(rawPassword)
             : null;
 
-        User user = User.builder()
-            .firstName(request.firstName())
-            .lastName(request.lastName())
-            .email(request.email())
-            .phone(request.phone())
-            .role(request.role())
-            .status(request.status() != null ? request.status() : UserStatus.ACTIVE)
-            .school(request.school())
-            .region(request.region())
-            .permissions(request.permissions() != null ? request.permissions() : Collections.emptySet())
-            .password(encodedPassword)
-            .build();
+        User user = userMapper.toEntity(request, encodedPassword);
 
         User saved = userRepository.save(user);
         log.info("Created user id={} email={}", saved.getId(), saved.getEmail());
-        return UserResponse.from(saved);
+        return userMapper.toResponse(saved);
     }
 
     public PagedResponse<UserResponse> getUsers(
@@ -83,7 +75,7 @@ public class UserServiceImpl implements UserService {
 
         List<UserResponse> content = result.getContent()
             .stream()
-            .map(UserResponse::from)
+            .map(userMapper::toResponse)
             .toList();
 
         return new PagedResponse<>(
@@ -99,7 +91,7 @@ public class UserServiceImpl implements UserService {
     public UserStatsResponse getStats() {
         LocalDateTime startOfMonth = LocalDateTime.now().withDayOfMonth(1).toLocalDate().atStartOfDay();
 
-        return new UserStatsResponse(
+        return userMapper.toStatsResponse(
             userRepository.count(),
             userRepository.countCreatedSince(startOfMonth),
             userRepository.countByRole(Role.CENTRAL_ADMIN),

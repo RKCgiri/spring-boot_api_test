@@ -14,6 +14,7 @@
     import com.example.app.enums.UserStatus;
     import com.example.app.exception.DuplicateResourceException;
     import com.example.app.exception.UnauthorizedException;
+    import com.example.app.mapper.UserMapper;
     import com.example.app.repository.UserRepository;
     import com.example.app.security.JwtTokenProvider;
     import com.example.app.service.AuthService;
@@ -44,6 +45,7 @@
         private final UserRepository userRepository;
         private final PasswordEncoder passwordEncoder;
         private final JwtTokenProvider jwtTokenProvider;
+        private final UserMapper userMapper;
         private final SecureRandom secureRandom = new SecureRandom();
 
         @Override
@@ -73,24 +75,12 @@
 
             String encodedPassword = passwordEncoder.encode(request.password());
 
-            User user = User.builder()
-                    .firstName(request.firstName() != null ? request.firstName().trim() : null)
-                    .lastName(request.lastName() != null ? request.lastName().trim() : null)
-                    .email(normalizedEmail)
-                    .password(encodedPassword)
-                    .phone(request.phone() != null ? request.phone().trim() : null)
-                    .role(assignedRole)
-                    .status(UserStatus.ACTIVE)
-                    .school(request.school() != null ? request.school().trim() : null)
-                    .region(request.region() != null ? request.region().trim() : null)
-                    .permissions(Collections.emptySet())
-                    .otpAttempts(0)
-                    .build();
+            User user = userMapper.toEntity(request, normalizedEmail, encodedPassword, assignedRole);
 
             User savedUser = userRepository.save(user);
             log.info("User registered successfully with id={} email={} role={}", savedUser.getId(), savedUser.getEmail(), savedUser.getRole());
 
-            return UserResponse.from(savedUser);
+            return userMapper.toResponse(savedUser);
         }
 
         private boolean isPrivilegedRole(Role role) {
@@ -123,7 +113,7 @@
             String token = jwtTokenProvider.generateAccessToken(user);
             log.info("User {} logged in successfully", user.getEmail());
 
-            return new LoginResponse(token, user.getEmail(), user.getRole(), user.getPermissions());
+            return userMapper.toLoginResponse(user, token);
         }
 
         @Override

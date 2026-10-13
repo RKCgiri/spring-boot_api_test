@@ -6,6 +6,7 @@ import com.example.app.dto.response.SchoolStatsResponse;
 import com.example.app.entity.School;
 import com.example.app.entity.User;
 import com.example.app.enums.SchoolStatus;
+import com.example.app.mapper.SchoolMapper;
 import com.example.app.repository.SchoolRepository;
 import com.example.app.repository.UserRepository;
 import com.example.app.service.SchoolService;
@@ -27,6 +28,7 @@ public class SchoolServiceImpl implements SchoolService {
 
     private final SchoolRepository schoolRepository;
     private final UserRepository userRepository;
+    private final SchoolMapper schoolMapper;
 
     @Override
     @Transactional
@@ -47,22 +49,10 @@ public class SchoolServiceImpl implements SchoolService {
                     ));
         }
 
-        School school = School.builder()
-                .schoolName(request.getSchoolName())
-                .schoolCode(request.getSchoolCode())
-                .district(request.getDistrict())
-                .region(request.getRegion())
-                .address(request.getAddress())
-                .phone(request.getPhone())
-                .admin(admin)
-                .status(request.getStatus() != null
-                        ? request.getStatus()
-                        : SchoolStatus.ACTIVE)
-                .build();
-
+        School school = schoolMapper.toEntity(request, admin);
         School savedSchool = schoolRepository.save(school);
 
-        return mapToResponse(savedSchool);
+        return schoolMapper.toResponse(savedSchool);
     }
 
     @Override
@@ -75,12 +65,7 @@ public class SchoolServiceImpl implements SchoolService {
 
         Double avgSync = schoolRepository.getAverageSyncRate();
 
-        return SchoolStatsResponse.builder()
-                .totalSchools(total)
-                .activeSchools(active)
-                .offlineSchools(offline)
-                .avgSyncRate(avgSync != null ? avgSync : 0.0)
-                .build();
+        return schoolMapper.toStatsResponse(total, active, offline, avgSync);
     }
 
     @Override
@@ -101,7 +86,7 @@ public class SchoolServiceImpl implements SchoolService {
                 pageable
         );
 
-        return schools.map(this::mapToResponse);
+        return schools.map(schoolMapper::toResponse);
     }
 
     @Override
@@ -162,29 +147,5 @@ public class SchoolServiceImpl implements SchoolService {
         }
 
         return value;
-    }
-
-    private SchoolResponse mapToResponse(School school) {
-        return SchoolResponse.builder()
-                .id(school.getId())
-                .schoolName(school.getSchoolName())
-                .schoolCode(school.getSchoolCode())
-                .district(school.getDistrict())
-                .region(school.getRegion())
-                .address(school.getAddress())
-                .phone(school.getPhone())
-                .adminId(school.getAdmin() != null
-                        ? school.getAdmin().getId()
-                        : null)
-                .adminName(school.getAdmin() != null
-                        ? school.getAdmin().getFullName()
-                        : null)
-                .status(school.getStatus())
-                .studentsCount(school.getStudentsCount())
-                .teachersCount(school.getTeachersCount())
-                .syncRate(school.getSyncRate())
-                .createdAt(school.getCreatedAt())
-                .updatedAt(school.getUpdatedAt())
-                .build();
     }
 }

@@ -30,6 +30,8 @@ C:\Users\sudiptagiri\Downloads\java_project_setup\java_project_setup\src\main\ja
 C:\Users\sudiptagiri\Downloads\java_project_setup\java_project_setup\src\main\java\com\example\app\exception\GlobalExceptionHandler.java
 C:\Users\sudiptagiri\Downloads\java_project_setup\java_project_setup\src\main\java\com\example\app\exception\ResourceNotFoundException.java
 C:\Users\sudiptagiri\Downloads\java_project_setup\java_project_setup\src\main\java\com\example\app\exception\UnauthorizedException.java
+C:\Users\sudiptagiri\Downloads\java_project_setup\java_project_setup\src\main\java\com\example\app\mapper\SchoolMapper.java
+C:\Users\sudiptagiri\Downloads\java_project_setup\java_project_setup\src\main\java\com\example\app\mapper\UserMapper.java
 C:\Users\sudiptagiri\Downloads\java_project_setup\java_project_setup\src\main\java\com\example\app\repository\SchoolRepository.java
 C:\Users\sudiptagiri\Downloads\java_project_setup\java_project_setup\src\main\java\com\example\app\repository\UserRepository.java
 C:\Users\sudiptagiri\Downloads\java_project_setup\java_project_setup\src\main\java\com\example\app\security\CustomAccessDeniedHandler.java

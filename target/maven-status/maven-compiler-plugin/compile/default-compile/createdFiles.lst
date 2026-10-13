@@ -21,6 +21,7 @@ com\example\app\security\JwtAuthenticationEntryPoint.class
 com\example\app\dto\request\UserRequest.class
 com\example\app\dto\response\SchoolResponse$SchoolResponseBuilder.class
 com\example\app\service\impl\AuthServiceImpl.class
+com\example\app\mapper\SchoolMapper.class
 com\example\app\enums\Permission.class
 com\example\app\dto\response\UserResponse.class
 com\example\app\dto\response\PagedResponse.class
@@ -37,6 +38,7 @@ com\example\app\controller\HealthController.class
 com\example\app\entity\User$UserBuilder.class
 com\example\app\enums\SchoolStatus.class
 com\example\app\security\CustomUserDetails.class
+com\example\app\mapper\UserMapper.class
 com\example\app\exception\DuplicateResourceException.class
 com\example\app\dto\response\UserStatsResponse.class
 com\example\app\entity\User.class
