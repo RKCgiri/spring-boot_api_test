@@ -54,11 +54,17 @@ public class User {
     @Builder.Default
     private Integer otpAttempts = 0;
 
-    @Column(name = "password_reset_token", length = 255)
+    @Column(name = "password_reset_token", length = 512)
     private String passwordResetToken;
 
     @Column(name = "password_reset_token_expires_at")
     private LocalDateTime passwordResetTokenExpiresAt;
+
+    @Column(name = "refresh_token", length = 512)
+    private String refreshToken;
+
+    @Column(name = "refresh_token_expires_at")
+    private LocalDateTime refreshTokenExpiresAt;
 
     @Column(length = 20)
     private String phone;

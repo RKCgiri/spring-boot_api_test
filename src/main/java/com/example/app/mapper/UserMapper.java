@@ -77,12 +77,12 @@ public class UserMapper {
         );
     }
 
-    public LoginResponse toLoginResponse(User user, String token) {
+    public LoginResponse toLoginResponse(User user, String accessToken, String refreshToken, long refreshTokenExpiresInMs) {
         if (user == null) {
             return null;
         }
 
-        return new LoginResponse(token, user.getEmail(), user.getRole(), user.getPermissions());
+        return new LoginResponse(accessToken, refreshToken, refreshTokenExpiresInMs, user.getEmail(), user.getRole(), user.getPermissions());
     }
 
     public UserStatsResponse toStatsResponse(

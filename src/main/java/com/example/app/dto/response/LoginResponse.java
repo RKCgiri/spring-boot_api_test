@@ -7,12 +7,15 @@ import java.util.Set;
 
 public record LoginResponse(
     String accessToken,
+    String refreshToken,
     String tokenType,
+    long refreshTokenExpiresInMs,
     String email,
     Role role,
     Set<Permission> permissions
 ) {
-    public LoginResponse(String accessToken, String email, Role role, Set<Permission> permissions) {
-        this(accessToken, "Bearer", email, role, permissions);
+    public LoginResponse(String accessToken, String refreshToken, long refreshTokenExpiresInMs,
+                         String email, Role role, Set<Permission> permissions) {
+        this(accessToken, refreshToken, "Bearer", refreshTokenExpiresInMs, email, role, permissions);
     }
 }

@@ -161,7 +161,7 @@ class UserMapperTest {
         assertNull(userMapper.toResponse(null));
     }
 
-    @Test
+   @Test
     void testToLoginResponse() {
         User user = User.builder()
                 .email("test@example.com")
@@ -169,10 +169,17 @@ class UserMapperTest {
                 .permissions(Set.of(Permission.USER_MANAGEMENT))
                 .build();
 
-        LoginResponse response = userMapper.toLoginResponse(user, "jwt.token.here");
+        LoginResponse response = userMapper.toLoginResponse(
+                user,
+                "jwt.token.here",
+                "refresh.token.here",
+                3600000L
+        );
 
         assertNotNull(response);
         assertEquals("jwt.token.here", response.accessToken());
+        assertEquals("refresh.token.here", response.refreshToken());
+        assertEquals(3600000L, response.refreshTokenExpiresInMs());
         assertEquals("test@example.com", response.email());
         assertEquals(Role.CENTRAL_ADMIN, response.role());
         assertEquals(Set.of(Permission.USER_MANAGEMENT), response.permissions());

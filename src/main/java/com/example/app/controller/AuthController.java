@@ -2,6 +2,7 @@ package com.example.app.controller;
 
 import com.example.app.dto.request.ForgotPasswordRequest;
 import com.example.app.dto.request.LoginRequest;
+import com.example.app.dto.request.RefreshTokenRequest;
 import com.example.app.dto.request.RegisterRequest;
 import com.example.app.dto.request.ResetPasswordRequest;
 import com.example.app.dto.request.VerifyOtpRequest;
@@ -35,6 +36,11 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
         return ResponseEntity.ok(authService.login(request));
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<LoginResponse> refresh(@Valid @RequestBody RefreshTokenRequest request) {
+        return ResponseEntity.ok(authService.refreshToken(request));
     }
 
     @PostMapping("/forgot-password")

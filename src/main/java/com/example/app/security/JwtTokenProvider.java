@@ -20,15 +20,18 @@ public class JwtTokenProvider {
 
     private final SecretKey key;
     private final long jwtExpirationMs;
+    private final long refreshTokenExpirationMs;
     private final long resetTokenExpirationMs;
 
     public JwtTokenProvider(
             @Value("${app.jwt.secret}") String secret,
             @Value("${app.jwt.expiration-ms:86400000}") long jwtExpirationMs,
+            @Value("${app.jwt.refresh-token-expiration-ms:604800000}") long refreshTokenExpirationMs,
             @Value("${app.jwt.reset-token-expiration-ms:600000}") long resetTokenExpirationMs
     ) {
         this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
         this.jwtExpirationMs = jwtExpirationMs;
+        this.refreshTokenExpirationMs = refreshTokenExpirationMs;
         this.resetTokenExpirationMs = resetTokenExpirationMs;
     }
 
@@ -66,6 +69,24 @@ public class JwtTokenProvider {
                 .compact();
     }
 
+    public String generateRefreshToken(User user) {
+        Date now = new Date();
+        Date expiryDate = new Date(now.getTime() + refreshTokenExpirationMs);
+
+        return Jwts.builder()
+                .subject(user.getEmail())
+                .claim("userId", user.getId())
+                .claim("type", "REFRESH")
+                .issuedAt(now)
+                .expiration(expiryDate)
+                .signWith(key)
+                .compact();
+    }
+
+    public long getRefreshTokenExpirationMs() {
+        return refreshTokenExpirationMs;
+    }
+
     public String getEmailFromToken(String token) {
         Claims claims = getClaims(token);
         return claims != null ? claims.getSubject() : null;
@@ -95,6 +116,16 @@ public class JwtTokenProvider {
             return isReset && emailMatches;
         } catch (Exception e) {
             log.error("Invalid password reset token: {}", e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean validateRefreshToken(String token) {
+        try {
+            Claims claims = getClaims(token);
+            return claims != null && "REFRESH".equals(claims.get("type", String.class));
+        } catch (Exception e) {
+            log.error("Invalid JWT refresh token: {}", e.getMessage());
             return false;
         }
     }

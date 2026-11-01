@@ -2,6 +2,7 @@ package com.example.app.service;
 
 import com.example.app.dto.request.ForgotPasswordRequest;
 import com.example.app.dto.request.LoginRequest;
+import com.example.app.dto.request.RefreshTokenRequest;
 import com.example.app.dto.request.RegisterRequest;
 import com.example.app.dto.request.ResetPasswordRequest;
 import com.example.app.dto.request.VerifyOtpRequest;
@@ -13,6 +14,7 @@ import com.example.app.dto.response.VerifyOtpResponse;
 public interface AuthService {
     UserResponse register(RegisterRequest request);
     LoginResponse login(LoginRequest request);
+    LoginResponse refreshToken(RefreshTokenRequest request);
     MessageResponse forgotPassword(ForgotPasswordRequest request);
     VerifyOtpResponse verifyOtp(VerifyOtpRequest request);
     MessageResponse resetPassword(ResetPasswordRequest request);

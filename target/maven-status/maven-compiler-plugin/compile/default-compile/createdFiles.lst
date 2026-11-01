@@ -39,6 +39,7 @@ com\example\app\entity\User$UserBuilder.class
 com\example\app\enums\SchoolStatus.class
 com\example\app\security\CustomUserDetails.class
 com\example\app\mapper\UserMapper.class
+com\example\app\dto\request\RefreshTokenRequest.class
 com\example\app\exception\DuplicateResourceException.class
 com\example\app\dto\response\UserStatsResponse.class
 com\example\app\entity\User.class

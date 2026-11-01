@@ -2,6 +2,7 @@
 
     import com.example.app.dto.request.ForgotPasswordRequest;
     import com.example.app.dto.request.LoginRequest;
+    import com.example.app.dto.request.RefreshTokenRequest;
     import com.example.app.dto.request.RegisterRequest;
     import com.example.app.dto.request.ResetPasswordRequest;
     import com.example.app.dto.request.VerifyOtpRequest;
@@ -26,7 +27,6 @@
 
     import java.security.SecureRandom;
     import java.time.LocalDateTime;
-    import java.util.Collections;
     import java.util.Set;
 
     @Service
@@ -108,12 +108,67 @@
             }
 
             user.setLastLogin(LocalDateTime.now());
+
+            String accessToken = jwtTokenProvider.generateAccessToken(user);
+            String refreshToken = jwtTokenProvider.generateRefreshToken(user);
+            long refreshExpiresInMs = jwtTokenProvider.getRefreshTokenExpirationMs();
+
+            user.setRefreshToken(refreshToken);
+            user.setRefreshTokenExpiresAt(LocalDateTime.now().plusSeconds(refreshExpiresInMs / 1000));
             userRepository.save(user);
 
-            String token = jwtTokenProvider.generateAccessToken(user);
             log.info("User {} logged in successfully", user.getEmail());
 
-            return userMapper.toLoginResponse(user, token);
+            return userMapper.toLoginResponse(user, accessToken, refreshToken, refreshExpiresInMs);
+        }
+
+        @Override
+        @Transactional
+        public LoginResponse refreshToken(RefreshTokenRequest request) {
+            String incomingToken = request.refreshToken();
+
+            // 1. Validate JWT signature & type
+            if (!jwtTokenProvider.validateRefreshToken(incomingToken)) {
+                throw new UnauthorizedException("Invalid or expired refresh token");
+            }
+
+            // 2. Extract email and look up user
+            String email = jwtTokenProvider.getEmailFromToken(incomingToken);
+            User user = userRepository.findByEmail(email)
+                    .orElseThrow(() -> new UnauthorizedException("Invalid refresh token"));
+
+            // 3. Validate against DB-stored token (rotation guard)
+            if (user.getRefreshToken() == null || !user.getRefreshToken().equals(incomingToken)) {
+                // Possible token reuse – invalidate stored token
+                user.setRefreshToken(null);
+                user.setRefreshTokenExpiresAt(null);
+                userRepository.save(user);
+                throw new UnauthorizedException("Refresh token reuse detected. Please log in again.");
+            }
+
+            if (user.getRefreshTokenExpiresAt() == null ||
+                    LocalDateTime.now().isAfter(user.getRefreshTokenExpiresAt())) {
+                user.setRefreshToken(null);
+                user.setRefreshTokenExpiresAt(null);
+                userRepository.save(user);
+                throw new UnauthorizedException("Refresh token has expired. Please log in again.");
+            }
+
+            if (user.getStatus() != com.example.app.enums.UserStatus.ACTIVE) {
+                throw new UnauthorizedException("Account is not active.");
+            }
+
+            // 4. Rotate: issue a brand-new token pair
+            String newAccessToken  = jwtTokenProvider.generateAccessToken(user);
+            String newRefreshToken = jwtTokenProvider.generateRefreshToken(user);
+            long refreshExpiresInMs = jwtTokenProvider.getRefreshTokenExpirationMs();
+
+            user.setRefreshToken(newRefreshToken);
+            user.setRefreshTokenExpiresAt(LocalDateTime.now().plusSeconds(refreshExpiresInMs / 1000));
+            userRepository.save(user);
+
+            log.info("Refresh token rotated for user: {}", user.getEmail());
+            return userMapper.toLoginResponse(user, newAccessToken, newRefreshToken, refreshExpiresInMs);
         }
 
         @Override
